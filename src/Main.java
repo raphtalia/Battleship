@@ -1,9 +1,25 @@
-import Colors.*;
-
 public class Main {
-    public static void main(String[] args) {
-        Colors colors = new Colors(NumSupportedColors.COLORS_256);
+    private static int indexOfAlphabet(char c) {
+        c = Character.toUpperCase(c);
 
-        System.out.println(colors.red("Hello World!"));
+        if (c < 'A' || c > 'Z') {
+            throw new IllegalArgumentException("Invalid character: " + c);
+        }
+
+        return c - 'A';
+    }
+
+    private static char getChar(int i) {
+        if (i < 0 || i > 25) {
+            throw new IllegalArgumentException("Invalid index: " + i);
+        }
+
+        return (char) (i + 'A');
+    }
+
+    public static void main(String[] args) {
+        // int[][] board = new int[26][26];
+
+        System.out.println(new Colors("Hello World!").red().bold().bgCyan());
     }
 }
