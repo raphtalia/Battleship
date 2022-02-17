@@ -1,0 +1,5 @@
+package Game;
+
+public enum ShipType {
+    CARRIER, BATTLESHIP, CRUISER, SUBMARINE, DESTROYER, PATROL_BOAT,
+}

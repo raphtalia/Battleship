@@ -1,3 +1,5 @@
+package CLI;
+
 public class Colors {
     private String str;
 
@@ -9,6 +11,7 @@ public class Colors {
         return this.str;
     }
 
+    // TODO: Set ANSI codes as constants, and support for 256 colors?
     public Colors black() {
         this.str = "\u001b[30m" + this.str + "\u001b[0m";
         return this;
