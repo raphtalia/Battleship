@@ -1,4 +1,5 @@
 import CLI.Colors;
+import Game.ShipType;
 import Game.Simulation;
 
 public class Main {
@@ -23,7 +24,14 @@ public class Main {
     public static void main(String[] args) {
         System.out.println(new Colors("Battleship").bold().red());
 
-        final Simulation sim = new Simulation(26, 26, 2, 2, 2, 2, 2, 2);
+        final Simulation sim = new Simulation(26, 26);
+
+        sim.placeShipRandom(ShipType.CARRIER, 2);
+        sim.placeShipRandom(ShipType.BATTLESHIP, 2);
+        sim.placeShipRandom(ShipType.CRUISER, 2);
+        sim.placeShipRandom(ShipType.SUBMARINE, 2);
+        sim.placeShipRandom(ShipType.DESTROYER, 2);
+        sim.placeShipRandom(ShipType.PATROL_BOAT, 2);
 
         for (int i = 0; i < 400; i++) {
             sim.shootRandom();

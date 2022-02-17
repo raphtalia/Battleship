@@ -5,19 +5,19 @@ public class Matrix<T> {
     public int height;
     private Object data[][];
 
-    public Matrix(int width, int height) {
-        this.width = width;
-        this.height = height;
+    public Matrix(int inputWidth, int inputHeight) {
+        width = inputWidth;
+        height = inputHeight;
 
         @SuppressWarnings("unchecked")
-        T[][] data = (T[][]) new Object[height][width];
+        T[][] newData = (T[][]) new Object[inputHeight][inputWidth];
 
-        this.data = data;
+        data = newData;
     }
 
-    public Matrix(int width, int height, T value) {
-        this(width, height);
-        this.setAll(value);
+    public Matrix(int inputWidth, int inputHeight, T value) {
+        this(inputWidth, inputHeight);
+        setAll(value);
     }
 
     public String toString() {
@@ -47,9 +47,9 @@ public class Matrix<T> {
     }
 
     public Matrix<T> setAll(T value) {
-        for (int x = 0; x < this.height; x++) {
-            for (int y = 0; y < this.width; y++) {
-                this.data[x][y] = value;
+        for (int x = 0; x < height; x++) {
+            for (int y = 0; y < width; y++) {
+                data[x][y] = value;
             }
         }
 

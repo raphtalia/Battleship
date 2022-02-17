@@ -1,16 +1,16 @@
 package Data;
 
 public class Vector2 {
-    public float x;
-    public float y;
+    private float x;
+    private float y;
 
-    public Vector2(float x, float y) {
-        this.x = x;
-        this.y = y;
+    public Vector2(float inputX, float inputY) {
+        x = inputX;
+        y = inputY;
     }
 
     public String toString() {
-        return "(" + this.x + ", " + this.y + ")";
+        return "(" + x + ", " + y + ")";
     }
 
     public float magnitude() {
@@ -23,5 +23,13 @@ public class Vector2 {
 
     public Vector2 subtract(Vector2 other) {
         return new Vector2(x - other.x, y - other.y);
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
     }
 }

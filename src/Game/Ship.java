@@ -22,21 +22,21 @@ public class Ship {
     private int health;
     private int maxHealth;
 
-    public Ship(ShipType shipType) {
-        this.shipType = shipType;
-        this.health = SHIP_SIZES.get(shipType);
-        this.maxHealth = health;
+    public Ship(ShipType inputShipType) {
+        shipType = inputShipType;
+        health = SHIP_SIZES.get(inputShipType);
+        maxHealth = health;
     }
 
     public Ship setLocationAndDirection(Vector2 loc, Direction dir) {
-        if (this.location != null || this.direction != null) {
+        if (location != null || direction != null) {
             // Error is slightly misleading but if a location or direction is defined so
             // should the other
             throw new IllegalStateException("Ship already has a location and direction");
         }
 
-        this.location = loc;
-        this.direction = dir;
+        location = loc;
+        direction = dir;
 
         return this;
     }
