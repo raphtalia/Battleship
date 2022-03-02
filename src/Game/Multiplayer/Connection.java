@@ -7,8 +7,9 @@ import java.net.*;
 
 public class Connection {
     private Socket socket;
-    private DataInputStream in;
-    private DataOutputStream out;
+
+    public final DataInputStream in;
+    public final DataOutputStream out;
 
     public Connection(ConnectionType type, String address, int port) throws UnknownHostException, IOException {
         switch (type) {
