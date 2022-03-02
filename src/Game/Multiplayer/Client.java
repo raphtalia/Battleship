@@ -14,6 +14,10 @@ public class Client {
         connection.close();
     }
 
+    public String read() throws IOException {
+        return connection.read();
+    }
+
     public Client send(String str) throws IOException {
         connection.write(str);
         return this;

@@ -54,10 +54,12 @@ public class Main {
                 final Server server = new Server();
                 server.connect("localhost", 3000);
                 System.out.println(server.readAny());
+                server.sendAll("hello from server!");
                 break;
             case 2:
                 final Client client = new Client("localhost", 3000);
                 client.send("hello from client!");
+                System.out.println(client.read());
                 break;
         }
     }
