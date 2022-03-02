@@ -3,12 +3,12 @@ package Game;
 import CLI.Colors;
 import Data.Vector2;
 
-public class Simulation extends Game {
-    public Simulation(int boardWidth, int boardHeight) {
+public class Player extends Game {
+    public Player(int boardWidth, int boardHeight) {
         super(boardWidth, boardHeight);
     }
 
-    public Simulation placeShipRandom(Ship ship) {
+    public Player placeShipRandom(Ship ship) {
         boolean shipPlaced = false;
 
         while (!shipPlaced) {
@@ -25,13 +25,13 @@ public class Simulation extends Game {
         return this;
     }
 
-    public Simulation placeShipRandom(ShipType shipType) {
+    public Player placeShipRandom(ShipType shipType) {
         placeShipRandom(new Ship(shipType));
 
         return this;
     }
 
-    public Simulation placeShipRandom(ShipType shipType, int numShips) {
+    public Player placeShipRandom(ShipType shipType, int numShips) {
         for (int i = 0; i < numShips; i++) {
             placeShipRandom(shipType);
         }
@@ -39,7 +39,7 @@ public class Simulation extends Game {
         return this;
     }
 
-    public Simulation shootRandom() {
+    public Player shootRandom() {
         boolean shot = false;
 
         while (!shot) {
@@ -55,7 +55,7 @@ public class Simulation extends Game {
         return this;
     }
 
-    public Simulation printMap() {
+    public Player printMap() {
         // Meant for debugging
 
         for (int y = 0; y < getBoardHeight(); y++) {

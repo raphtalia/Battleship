@@ -1,8 +1,8 @@
 package Data;
 
 public class Matrix<T> {
-    public int width;
-    public int height;
+    private int width;
+    private int height;
     private Object data[][];
 
     public Matrix(int inputWidth, int inputHeight) {
@@ -54,5 +54,23 @@ public class Matrix<T> {
         }
 
         return this;
+    }
+
+    public Matrix<T> setFrom(int startX, int startY, int endX, int endY, T value) {
+        for (int x = startX; x <= endX; x++) {
+            for (int y = startY; y <= endY; y++) {
+                data[x][y] = value;
+            }
+        }
+
+        return this;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 }
