@@ -1,1 +1,0 @@
-cd src && javac Main.java -d ../bin && java -cp ../bin Main

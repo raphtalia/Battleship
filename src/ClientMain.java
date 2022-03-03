@@ -1,14 +1,9 @@
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.util.Scanner;
 
-import CLI.Colors;
-import Game.ShipType;
 import Game.Multiplayer.Client;
-import Game.Multiplayer.Server;
-import Game.Player;
 
-public class Main {
+public class ClientMain {
     private static int indexOfAlphabet(char c) {
         c = Character.toUpperCase(c);
 
@@ -48,19 +43,8 @@ public class Main {
         // System.out.printf("%s out of %s ships remain", plyr.getRemainingShips(),
         // plyr.getTotalShips());
 
-        int role = (new Scanner(System.in)).nextInt();
-        switch (role) {
-            case 1:
-                final Server server = new Server();
-                server.connect("localhost", 3000);
-                System.out.println(server.readAny());
-                server.sendAll("hello from server!");
-                break;
-            case 2:
-                final Client client = new Client("localhost", 3000);
-                client.send("hello from client!");
-                System.out.println(client.read());
-                break;
-        }
+        final Client client = new Client("192.168.1.94", 3000);
+        client.send("hello from client!");
+        System.out.println(client.read());
     }
 }
