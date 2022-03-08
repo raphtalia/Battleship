@@ -1,6 +1,8 @@
 import java.io.IOException;
 import java.net.UnknownHostException;
 
+import CLI.Inquirer.Inquirer;
+import CLI.Inquirer.InquiryType;
 import Game.Multiplayer.Client;
 
 public class ClientMain {
@@ -43,8 +45,15 @@ public class ClientMain {
         // System.out.printf("%s out of %s ships remain", plyr.getRemainingShips(),
         // plyr.getTotalShips());
 
-        final Client client = new Client("192.168.1.94", 3000);
-        client.send("hello from client!");
-        System.out.println(client.read());
+        /*
+         * final Client client = new Client("192.168.1.94", 3000);
+         * client.send("hello from client!");
+         * System.out.println(client.read());
+         */
+
+        final Inquirer inquirer = new Inquirer();
+
+        inquirer.inquire(InquiryType.LIST, "Choice", "Choose the following",
+                new String[] { "Choice 1", "Choice 2", "Choice 3" }).prompt();
     }
 }
