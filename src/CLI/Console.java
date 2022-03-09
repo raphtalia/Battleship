@@ -10,6 +10,10 @@ public class Console {
         return new Colors(str);
     }
 
+    public Colors text(String format, String... args) {
+        return new Colors(format, args);
+    }
+
     public Console cursorHome() {
         System.out.print(Constants.ESCAPE + "[H");
 
@@ -74,53 +78,158 @@ public class Console {
         return this;
     }
 
-    // Doesn't wrap all methods, I'll add more when I need them
+    // Fancy coloring of inputs
     public String nextLine() {
+        System.out.print(Constants.COLORS_CYAN + Constants.COLORS_BOLD);
         return scanner.nextLine();
     }
 
-    public String nextLine(String message) {
-        System.out.print(message);
-        return nextLine();
-    }
-
-    public String nextLine(String format, String... args) {
-        System.out.printf(format, (Object[]) args);
-        return nextLine();
-    }
-
-    // TODO: Make this only clear part of the input line
     public int nextInt() {
-        boolean success = false;
-        int input = 0;
+        System.out.print(Constants.COLORS_CYAN + Constants.COLORS_BOLD);
+        return scanner.nextInt();
+    }
+
+    // Doesn't wrap all methods, I'll add more when I need them
+    public String getString(String message, String regex, String hint) {
+        String input;
 
         cursorSave();
 
-        do {
-            try {
-                cursorRestore().cursorEraseAfterLine();
+        while (true) {
+            cursorRestore().cursorEraseAfterLine();
+            System.out.print(message);
+            input = nextLine();
 
-                input = scanner.nextInt();
-                success = true;
-            } catch (Exception e) {
-                scanner.nextLine();
-                System.out.println(text("Invalid input").red().bold());
+            if (regex.length() == 0 || input.matches(regex)) {
+                break;
+            } else {
+                System.out.println(text(hint).red().bold());
             }
-        } while (!success);
+        }
 
-        cursorEraseAfter();
+        cursorRestore().cursorEraseAfter();
 
         return input;
     }
 
-    public int nextInt(String message) {
-        System.out.print(message);
-        return nextInt();
+    public String getString(String regex, String hint) {
+        return getString("", regex, hint);
     }
 
-    public int nextInt(String format, String... args) {
-        System.out.printf(format, (Object[]) args);
-        return nextInt();
+    public String getString() {
+        return getString("", "", "");
+    }
+
+    public String getString(String format, String... args) {
+        return getString(String.format(format, (Object[]) args), "", "");
+    }
+
+    public String getString(String regex, String hint, String format, String... args) {
+        return getString(String.format(format, (Object[]) args), regex, hint);
+    }
+
+    public int getInt(String message, int min, int max) {
+        boolean limits = min != max;
+        int input = 0;
+
+        cursorSave();
+
+        while (true) {
+            try {
+                cursorRestore().cursorEraseAfterLine();
+
+                System.out.print(message);
+
+                input = nextInt();
+
+                if (!limits || (limits && input >= min && input <= max)) {
+                    cursorRestore().cursorEraseAfterLine();
+                    return input;
+                } else {
+                    System.out.println(
+                            text("Input must be a number between %s and %s", String.valueOf(min), String.valueOf(max))
+                                    .red().bold());
+                }
+            } catch (Exception e) {
+                nextLine();
+                if (limits) {
+                    System.out.println(
+                            text("Input must be a number between %s and %s", String.valueOf(min), String.valueOf(max))
+                                    .red().bold());
+                } else {
+                    System.out.println(text("Input must be a number").red().bold());
+                }
+            }
+        }
+    }
+
+    public int getInt() {
+        return getInt("", 0, 0);
+    }
+
+    public int getInt(int min, int max) {
+        return getInt("", min, max);
+    }
+
+    public int getInt(String format, String... args) {
+        return getInt(String.format(format, (Object[]) args), 0, 0);
+    }
+
+    public int getInt(int min, int max, String format, String... args) {
+        return getInt(String.format(format, (Object[]) args), min, max);
+    }
+
+    public boolean getBoolean(String message) {
+        cursorSave();
+
+        while (true) {
+            if (message.length() > 0) {
+                System.out.printf("%s [Y/n] ", message);
+            } else {
+                System.out.print("[Y/n] ");
+            }
+
+            final String input = nextLine();
+
+            if (input.equalsIgnoreCase("yes".substring(0, input.length()))) {
+                cursorRestore().cursorEraseAfter();
+                return true;
+            } else if (input.equalsIgnoreCase("no".substring(0, input.length()))) {
+                cursorRestore().cursorEraseAfter();
+                return false;
+            } else {
+                System.out.println(text("Input must be yes or no").red().bold());
+                cursorRestore().cursorEraseAfterLine();
+            }
+        }
+    }
+
+    public boolean getBoolean() {
+        return getBoolean("");
+    }
+
+    public boolean getBoolean(String format, String... args) {
+        return getBoolean(String.format(format, (Object[]) args) + " ");
+    }
+
+    public int getChoice(String message, String[] choices) {
+        if (message.length() > 0) {
+            System.out.println(message);
+        }
+
+        for (int i = 0; i < choices.length; i++) {
+            System.out.printf("[%d] %s\n", i + 1, choices[i]);
+        }
+
+        return getInt(message, 1, choices.length);
+    }
+
+    public int getChoice(String[] choices) {
+        return getChoice("", choices);
+    }
+
+    public int getChoice(String[] choices, String format, String... args) {
+        return getChoice(String.format(format, (Object[]) args), choices);
     }
 
     public Console close() {

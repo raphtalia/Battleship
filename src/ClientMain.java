@@ -1,8 +1,7 @@
 import java.io.IOException;
 import java.net.UnknownHostException;
 
-import CLI.Inquirer.Inquirer;
-import CLI.Inquirer.InquiryType;
+import CLI.Console;
 import Game.Multiplayer.Client;
 
 public class ClientMain {
@@ -45,21 +44,23 @@ public class ClientMain {
         // System.out.printf("%s out of %s ships remain", plyr.getRemainingShips(),
         // plyr.getTotalShips());
 
-        /*
-         * final Client client = new Client("192.168.1.94", 3000);
-         * client.send("hello from client!");
-         * System.out.println(client.read());
-         */
+        final Console console = new Console();
 
-        final Inquirer inquirer = new Inquirer();
+        final String ip = console.getString("IP address: ", "^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$",
+                "Invalid IP address (A.B.C.D)");
+        final int port = console.getInt("Port: ", 0, 65535);
+        final Client client = new Client(ip, port);
 
-        inquirer.inquire(InquiryType.INPUT, "Choice", "Give input").prompt();
+        client.send("hello from client!");
+        System.out.println(client.read());
 
-        inquirer.inquire(InquiryType.NUMBER, "Choice", "Give number").prompt();
+        // System.out.println(console.getBoolean("Delete all?"));
 
-        inquirer.inquire(InquiryType.CONFIRM, "Choice", "Confirm this").prompt();
+        // System.out.println(console.getInt("Number please "));
 
-        inquirer.inquire(InquiryType.LIST, "Choice", "Choose the following",
-                new String[] { "Choice 1", "Choice 2", "Choice 3" }).prompt();
+        // System.out.println(console.getInt("Limited number please ", 0, 100));
+
+        // System.out.println(console.getChoice("Choose ", new String[] { "One", "Two",
+        // "Three" }));
     }
 }
