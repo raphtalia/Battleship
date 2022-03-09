@@ -5,6 +5,7 @@ import java.util.function.Function;
 
 import CLI.Colors;
 import CLI.Console;
+import javafx.scene.Cursor;
 
 public class Inquiry {
     private final InquiryType inquiryType;
@@ -65,7 +66,7 @@ public class Inquiry {
                         System.out.printf("[%d] %s\n", i + 1, choices[i]);
                     }
 
-                    choice = console.nextInt(message);
+                    choice = console.nextInt(message + " ");
                 } while (validator != null && validator.apply(String.valueOf(choice)));
 
                 break;

@@ -10,36 +10,66 @@ public class Console {
         return new Colors(str);
     }
 
+    public Console cursorHome() {
+        System.out.print(Constants.ESCAPE + "[H");
+
+        return this;
+    }
+
     public Console cursorSave() {
         // Save twice for support with DEC and SCO terminals
-        System.out.println(Constants.ESCAPE + " 7");
-        System.out.println(Constants.ESCAPE + "[s");
+        System.out.print(Constants.ESCAPE + " 7");
+        System.out.print(Constants.ESCAPE + "[s");
 
         return this;
     }
 
     public Console cursorRestore() {
         // Restore twice for support with DEC and SCO terminals
-        System.out.println(Constants.ESCAPE + " 8");
-        System.out.println(Constants.ESCAPE + "[u");
+        System.out.print(Constants.ESCAPE + " 8");
+        System.out.print(Constants.ESCAPE + "[u");
 
         return this;
     }
 
     public Console cursorEraseBefore() {
-        System.out.println(Constants.ESCAPE + "[1J");
+        System.out.print(Constants.ESCAPE + "[1J");
 
         return this;
     }
 
     public Console cursorEraseAfter() {
-        System.out.println(Constants.ESCAPE + "[0J");
+        System.out.print(Constants.ESCAPE + "[0J");
+
+        return this;
+    }
+
+    public Console cursorEraseBeforeLine() {
+        System.out.print(Constants.ESCAPE + "[1K");
+
+        return this;
+    }
+
+    public Console cursorEraseAfterLine() {
+        System.out.print(Constants.ESCAPE + "[0K");
+
+        return this;
+    }
+
+    public Console screenSave() {
+        System.out.print(Constants.ESCAPE + "[?47h");
+
+        return this;
+    }
+
+    public Console screenRestore() {
+        System.out.print(Constants.ESCAPE + "[?47l");
 
         return this;
     }
 
     public Console erase() {
-        System.out.println(Constants.ESCAPE + "[2J");
+        System.out.print(Constants.ESCAPE + "[2J");
 
         return this;
     }
@@ -64,20 +94,27 @@ public class Console {
         boolean success = false;
         int input = 0;
 
+        cursorSave();
+
         do {
             try {
+                cursorRestore().cursorEraseAfterLine();
+
                 input = scanner.nextInt();
                 success = true;
             } catch (Exception e) {
                 scanner.nextLine();
+                System.out.println(text("Invalid input").red().bold());
             }
         } while (!success);
+
+        cursorEraseAfter();
 
         return input;
     }
 
     public int nextInt(String message) {
-        System.out.printf("%s: ", message);
+        System.out.print(message);
         return nextInt();
     }
 
