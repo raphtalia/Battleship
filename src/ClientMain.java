@@ -51,7 +51,8 @@ public class ClientMain {
         final int port = console.getInt("Port: ", 0, 65535);
         final Client client = new Client(ip, port);
 
-        client.send("hello from client!");
+        client.write("hello from client!" + Math.random());
+        System.out.println(client.read());
         System.out.println(client.read());
 
         // System.out.println(console.getBoolean("Delete all?"));
