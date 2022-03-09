@@ -80,13 +80,13 @@ public class Console {
     }
 
     public String nextLine(String message) {
-        System.out.printf("%s: ", message);
-        return scanner.nextLine();
+        System.out.print(message);
+        return nextLine();
     }
 
     public String nextLine(String format, String... args) {
         System.out.printf(format, (Object[]) args);
-        return scanner.nextLine();
+        return nextLine();
     }
 
     // TODO: Make this only clear part of the input line

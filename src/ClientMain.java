@@ -53,6 +53,12 @@ public class ClientMain {
 
         final Inquirer inquirer = new Inquirer();
 
+        inquirer.inquire(InquiryType.INPUT, "Choice", "Give input").prompt();
+
+        inquirer.inquire(InquiryType.NUMBER, "Choice", "Give number").prompt();
+
+        inquirer.inquire(InquiryType.CONFIRM, "Choice", "Confirm this").prompt();
+
         inquirer.inquire(InquiryType.LIST, "Choice", "Choose the following",
                 new String[] { "Choice 1", "Choice 2", "Choice 3" }).prompt();
     }
