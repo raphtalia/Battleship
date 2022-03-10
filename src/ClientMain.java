@@ -8,7 +8,7 @@ import Game.Direction;
 import Game.Player;
 import Game.Ship;
 import Game.ShipType;
-import Game.Multiplayer.Client;
+import Game.Networking.Client;
 
 public class ClientMain {
     private static int indexOfAlphabet(char c) {

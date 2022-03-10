@@ -6,8 +6,8 @@ import Game.Direction;
 import Game.Player;
 import Game.Ship;
 import Game.ShipType;
-import Game.Multiplayer.Server;
-import Game.Multiplayer.SocketWrapper;
+import Game.Networking.Server;
+import Game.Networking.SocketWrapper;
 
 public class ServerMain {
     public static void main(String[] args) throws UnknownHostException, IOException {

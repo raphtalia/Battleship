@@ -1,4 +1,4 @@
-package Game.Multiplayer;
+package Game.Networking;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
