@@ -143,7 +143,7 @@ public class Console {
                 input = nextInt();
 
                 if (!limits || (limits && input >= min && input <= max)) {
-                    cursorRestore().cursorEraseAfterLine();
+                    cursorRestore().cursorEraseAfter();
                     return input;
                 } else {
                     System.out.println(

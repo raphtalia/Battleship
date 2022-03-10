@@ -51,9 +51,9 @@ public class ClientMain {
         final int port = console.getInt("Port: ", 0, 65535);
         final Client client = new Client(ip, port);
 
-        client.write("hello from client!" + Math.random());
-        System.out.println(client.read());
-        System.out.println(client.read());
+        // client.write("hello from client!" + Math.random());
+        // System.out.println(client.read());
+        // System.out.println(client.read());
 
         // System.out.println(console.getBoolean("Delete all?"));
 
@@ -63,5 +63,46 @@ public class ClientMain {
 
         // System.out.println(console.getChoice("Choose ", new String[] { "One", "Two",
         // "Three" }));
+
+        while (true) {
+            final String[] instructions = client.read().split(",");
+
+            for (String instruction : instructions) {
+                final String[] arguments = instruction.split(":");
+
+                switch (arguments[0]) {
+                    case "SET_PLAYER_ID": {
+                        final String id = arguments[1];
+                        break;
+                    }
+                    case "CREATE_BOARD": {
+                        final String boardId = arguments[1];
+                        final int width = Integer.parseInt(arguments[2]);
+                        final int height = Integer.parseInt(arguments[3]);
+                        break;
+                    }
+                    case "ADD_SHIP": {
+                        final String boardId = arguments[1];
+                        final String shipType = arguments[2];
+                        final int x = Integer.parseInt(arguments[3]);
+                        final int y = Integer.parseInt(arguments[4]);
+                        final String direction = arguments[5];
+                        break;
+                    }
+                    case "ADD_HIT": {
+                        break;
+                    }
+                    case "TAKE_TURN": {
+                        break;
+                    }
+                    case "REPORT_RESULTS": {
+                        break;
+                    }
+                }
+            }
+
+            // Throwaway message used by server to confirm message received
+            client.write("ACK");
+        }
     }
 }

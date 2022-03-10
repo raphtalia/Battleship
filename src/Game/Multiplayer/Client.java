@@ -22,7 +22,9 @@ public class Client {
     }
 
     public String read() throws IOException {
-        return in.readUTF();
+        final String input = in.readUTF();
+
+        return input;
     }
 
     public Client write(String str) throws IOException {

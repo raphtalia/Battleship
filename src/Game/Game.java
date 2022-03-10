@@ -145,6 +145,10 @@ public class Game {
         return remaining;
     }
 
+    public Ship[] getShips() {
+        return ships.toArray(new Ship[0]);
+    }
+
     public Game shoot(Vector2 target) {
         if (target.getX() < 0 || target.getX() >= boardWidth || target.getY() < 0 || target.getY() >= boardHeight) {
             throw new IllegalArgumentException("Target location is out of bounds");
