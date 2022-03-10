@@ -35,18 +35,29 @@ public class ServerMain {
 
         final Server server = new Server(ip, port);
 
+        // Create boards ahead of time
+        final Player player1Game = new Player(boardWidth, boardHeight);
+        player1Game.placeShipRandom(ShipType.BATTLESHIP);
+        player1Game.placeShipRandom(ShipType.CARRIER);
+        player1Game.placeShipRandom(ShipType.CRUISER);
+        player1Game.placeShipRandom(ShipType.DESTROYER);
+        player1Game.placeShipRandom(ShipType.PATROL_BOAT);
+        player1Game.placeShipRandom(ShipType.SUBMARINE);
+
+        final Player player2Game = new Player(boardWidth, boardHeight);
+        player2Game.placeShipRandom(ShipType.BATTLESHIP);
+        player2Game.placeShipRandom(ShipType.CARRIER);
+        player2Game.placeShipRandom(ShipType.CRUISER);
+        player2Game.placeShipRandom(ShipType.DESTROYER);
+        player2Game.placeShipRandom(ShipType.PATROL_BOAT);
+        player2Game.placeShipRandom(ShipType.SUBMARINE);
+
+        // Setup Player 1
         System.out.println("Waiting for Player 1...");
         final SocketWrapper player1 = server.accept();
-        final Player player1Game = new Player(boardWidth, boardHeight);
         {
             System.out.println("Player 1 connected");
             player1.write("SET_PLAYER_ID:Player1").read();
-            player1Game.placeShipRandom(ShipType.BATTLESHIP);
-            player1Game.placeShipRandom(ShipType.CARRIER);
-            player1Game.placeShipRandom(ShipType.CRUISER);
-            player1Game.placeShipRandom(ShipType.DESTROYER);
-            player1Game.placeShipRandom(ShipType.PATROL_BOAT);
-            player1Game.placeShipRandom(ShipType.SUBMARINE);
 
             String instruction = String.format("CREATE_BOARD:Player1:%d:%d,", boardWidth, boardHeight);
 
@@ -55,27 +66,33 @@ public class ServerMain {
                         (int) ship.getLocation().getX(), (int) ship.getLocation().getY(),
                         ship.getDirection() == Direction.HORIZONTAL ? "H" : "V");
             }
+            instruction += String.format("CREATE_BOARD:Player2:%d:%d,", boardWidth, boardHeight);
+            for (Ship ship : player2Game.getShips()) {
+                instruction += String.format("ADD_SHIP:Player2:%s:%s:%s:%s,", ship.getShipType(),
+                        (int) ship.getLocation().getX(), (int) ship.getLocation().getY(),
+                        ship.getDirection() == Direction.HORIZONTAL ? "H" : "V");
+            }
 
             player1.write(instruction.substring(0, instruction.length() - 1)).read();
         }
 
+        // Setup Player 2
         System.out.println("Waiting for Player 2...");
         final SocketWrapper player2 = server.accept();
-        final Player player2Game = new Player(boardWidth, boardHeight);
         {
             System.out.println("Player 2 connected");
             player2.write("SET_PLAYER_ID:Player2").read();
-            player2Game.placeShipRandom(ShipType.BATTLESHIP);
-            player2Game.placeShipRandom(ShipType.CARRIER);
-            player2Game.placeShipRandom(ShipType.CRUISER);
-            player2Game.placeShipRandom(ShipType.DESTROYER);
-            player2Game.placeShipRandom(ShipType.PATROL_BOAT);
-            player2Game.placeShipRandom(ShipType.SUBMARINE);
 
             String instruction = String.format("CREATE_BOARD:Player2:%d:%d,", boardWidth, boardHeight);
 
             for (Ship ship : player1Game.getShips()) {
                 instruction += String.format("ADD_SHIP:Player2:%s:%s:%s:%s,", ship.getShipType(),
+                        (int) ship.getLocation().getX(), (int) ship.getLocation().getY(),
+                        ship.getDirection() == Direction.HORIZONTAL ? "H" : "V");
+            }
+            instruction += String.format("CREATE_BOARD:Player1:%d:%d,", boardWidth, boardHeight);
+            for (Ship ship : player1Game.getShips()) {
+                instruction += String.format("ADD_SHIP:Player1:%s:%s:%s:%s,", ship.getShipType(),
                         (int) ship.getLocation().getX(), (int) ship.getLocation().getY(),
                         ship.getDirection() == Direction.HORIZONTAL ? "H" : "V");
             }

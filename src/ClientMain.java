@@ -1,7 +1,13 @@
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.HashMap;
 
 import CLI.Console;
+import Data.Vector2;
+import Game.Direction;
+import Game.Player;
+import Game.Ship;
+import Game.ShipType;
 import Game.Multiplayer.Client;
 
 public class ClientMain {
@@ -71,6 +77,9 @@ public class ClientMain {
         // System.out.println(console.getChoice("Choose ", new String[] { "One", "Two",
         // "Three" }));
 
+        String localPlayerId;
+        final HashMap<String, Player> players = new HashMap<String, Player>();
+
         while (true) {
             final String[] instructions = client.read().split(",");
 
@@ -79,13 +88,16 @@ public class ClientMain {
 
                 switch (arguments[0]) {
                     case "SET_PLAYER_ID": {
-                        final String id = arguments[1];
+                        localPlayerId = arguments[1];
                         break;
                     }
                     case "CREATE_BOARD": {
                         final String boardId = arguments[1];
                         final int width = Integer.parseInt(arguments[2]);
                         final int height = Integer.parseInt(arguments[3]);
+
+                        players.put(boardId, new Player(width, height));
+
                         break;
                     }
                     case "ADD_SHIP": {
@@ -93,10 +105,19 @@ public class ClientMain {
                         final String shipType = arguments[2];
                         final int x = Integer.parseInt(arguments[3]);
                         final int y = Integer.parseInt(arguments[4]);
-                        final String direction = arguments[5];
+                        final Direction dir = arguments[5].equals("H") ? Direction.HORIZONTAL : Direction.VERTICAL;
+
+                        players.get(boardId).placeShip(new Ship(ShipType.valueOf(shipType)), new Vector2(x, y), dir);
+
                         break;
                     }
                     case "ADD_HIT": {
+                        final String boardId = arguments[1];
+                        final int x = Integer.parseInt(arguments[2]);
+                        final int y = Integer.parseInt(arguments[3]);
+
+                        players.get(boardId).shoot(new Vector2(x, y));
+
                         break;
                     }
                     case "TAKE_TURN": {
