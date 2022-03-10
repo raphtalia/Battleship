@@ -13,13 +13,27 @@ public class ServerMain {
     public static void main(String[] args) throws UnknownHostException, IOException {
         final Console console = new Console();
 
-        final String ip = console.getString("IP address: ", "^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$",
-                "Invalid IP address (A.B.C.D)");
-        final int port = console.getInt("Port: ", 0, 65535);
-        final Server server = new Server(ip, port);
+        final String ip;
+        final int port;
+        if (console.getBoolean("Use default IP and port?")) {
+            ip = "127.0.0.1";
+            port = 3000;
+        } else {
+            ip = console.getString("IP address: ", "^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$", "Invalid IP address (A.B.C.D)");
+            port = console.getInt("Port: ", 0, 65535);
+        }
 
-        final int boardWidth = console.getInt("Board width: ", 5, 26);
-        final int boardHeight = console.getInt("Board height: ", 5, 26);
+        final int boardWidth;
+        final int boardHeight;
+        if (console.getBoolean("Use default game settings?")) {
+            boardWidth = 26;
+            boardHeight = 26;
+        } else {
+            boardWidth = console.getInt("Board width: ", 5, 26);
+            boardHeight = console.getInt("Board height: ", 5, 26);
+        }
+
+        final Server server = new Server(ip, port);
 
         System.out.println("Waiting for Player 1...");
         final SocketWrapper player1 = server.accept();

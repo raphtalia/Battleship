@@ -78,7 +78,6 @@ public class Console {
         return this;
     }
 
-    // Fancy coloring of inputs
     public String nextLine() {
         System.out.print(Constants.COLORS_CYAN + Constants.COLORS_BOLD);
         return scanner.nextLine();
@@ -86,7 +85,13 @@ public class Console {
 
     public int nextInt() {
         System.out.print(Constants.COLORS_CYAN + Constants.COLORS_BOLD);
-        return scanner.nextInt();
+
+        final int input = scanner.nextInt();
+
+        // Scanner doesn't auto read \n for some reason
+        scanner.nextLine();
+
+        return input;
     }
 
     // Doesn't wrap all methods, I'll add more when I need them
@@ -191,14 +196,19 @@ public class Console {
 
             final String input = nextLine();
 
-            if (input.equalsIgnoreCase("yes".substring(0, input.length()))) {
-                cursorRestore().cursorEraseAfter();
-                return true;
-            } else if (input.equalsIgnoreCase("no".substring(0, input.length()))) {
-                cursorRestore().cursorEraseAfter();
-                return false;
+            if (input.length() > 0) {
+                if (input.equalsIgnoreCase("yes".substring(0, input.length()))) {
+                    cursorRestore().cursorEraseAfter();
+                    return true;
+                } else if (input.equalsIgnoreCase("no".substring(0, input.length()))) {
+                    cursorRestore().cursorEraseAfter();
+                    return false;
+                } else {
+                    System.out.println(text("Input must be (y)es or (n)o").red().bold());
+                    cursorRestore().cursorEraseAfterLine();
+                }
             } else {
-                System.out.println(text("Input must be yes or no").red().bold());
+                System.out.println(text("Input must be (y)es or (n)o").red().bold());
                 cursorRestore().cursorEraseAfterLine();
             }
         }
