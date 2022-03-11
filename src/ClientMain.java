@@ -33,6 +33,7 @@ public class ClientMain {
 
         for (Player player : players.values()) {
             if (!player.equals(localPlayer)) {
+                System.out.println();
                 player.printMap(true);
             }
         }
