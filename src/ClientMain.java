@@ -108,6 +108,8 @@ public class ClientMain {
 
                         players.get(boardId).shoot(new Vector2(x, y));
 
+                        printBoards();
+
                         break;
                     }
                     case "TAKE_TURN": {
