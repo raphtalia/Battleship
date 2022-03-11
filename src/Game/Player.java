@@ -8,6 +8,14 @@ public class Player extends Game {
         super(boardWidth, boardHeight);
     }
 
+    private static char getChar(int i) {
+        if (i < 0 || i > 25) {
+            throw new IllegalArgumentException("Invalid index: " + i);
+        }
+
+        return (char) (i + 'A');
+    }
+
     public Player placeShipRandom(Ship ship) {
         boolean shipPlaced = false;
 
@@ -55,27 +63,43 @@ public class Player extends Game {
         return this;
     }
 
-    public Player printMap() {
-        // Meant for debugging
+    public Player printMap(boolean hideShips) {
+        System.out.print("    ");
+        for (int x = 0; x < getBoardWidth(); x++) {
+            System.out.print(new Colors(getChar(x) + "  ").green());
+        }
+        System.out.println();
 
         for (int y = 0; y < getBoardHeight(); y++) {
+            System.out.print(new Colors(String.format("%2d  ", y + 1)).green());
+
             for (int x = 0; x < getBoardWidth(); x++) {
                 final Vector2 loc = new Vector2(x, y);
                 final Ship ship = getShipAt(loc);
 
                 if (ship != null) {
                     if (isShot(loc)) {
-                        System.out.print(new Colors(ship.getShipType().toString().substring(0, 1) + " ").bold().red());
+                        if (hideShips) {
+                            System.out.print(new Colors("X  ").bold().red());
+                        } else {
+                            System.out.print(
+                                    new Colors(ship.getShipType().toString().substring(0, 1) + " ").bold().red());
+                        }
                     } else {
-                        System.out
-                                .print(new Colors(ship.getShipType().toString().substring(0, 1) + " ").bold().yellow());
+                        if (hideShips) {
+                            System.out.print(new Colors(".  ").cyan());
+                        } else {
+                            System.out.print(
+                                    new Colors(ship.getShipType().toString().substring(0, 1) + "  ").bold().yellow());
+                        }
                     }
                 } else if (isShot(loc)) {
-                    System.out.print(new Colors("* ").yellow());
+                    System.out.print(new Colors("*  ").yellow());
                 } else {
-                    System.out.print(new Colors(". ").cyan());
+                    System.out.print(new Colors(".  ").cyan());
                 }
             }
+
             System.out.println();
         }
 

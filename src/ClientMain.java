@@ -11,6 +11,9 @@ import Game.ShipType;
 import Game.Networking.Client;
 
 public class ClientMain {
+    private static String localPlayerId = "";
+    private static final HashMap<String, Player> players = new HashMap<String, Player>();
+
     private static int indexOfAlphabet(char c) {
         c = Character.toUpperCase(c);
 
@@ -21,12 +24,15 @@ public class ClientMain {
         return c - 'A';
     }
 
-    private static char getChar(int i) {
-        if (i < 0 || i > 25) {
-            throw new IllegalArgumentException("Invalid index: " + i);
-        }
+    private static void printBoards() {
+        final Player localPlayer = players.get(localPlayerId);
+        localPlayer.printMap(false);
 
-        return (char) (i + 'A');
+        for (Player player : players.values()) {
+            if (!player.equals(localPlayer)) {
+                player.printMap(true);
+            }
+        }
     }
 
     public static void main(String[] args) throws UnknownHostException, IOException {
@@ -77,11 +83,15 @@ public class ClientMain {
         // System.out.println(console.getChoice("Choose ", new String[] { "One", "Two",
         // "Three" }));
 
-        String localPlayerId;
-        final HashMap<String, Player> players = new HashMap<String, Player>();
-
         while (true) {
-            final String[] instructions = client.read().split(",");
+            final String[] instructions;
+            try {
+                instructions = client.read().split(",");
+            } catch (IOException e) {
+                System.out.println(console.text("Connection terminated").red().bold());
+                break;
+            }
+            String response = "ACK";
 
             for (String instruction : instructions) {
                 final String[] arguments = instruction.split(":");
@@ -89,6 +99,7 @@ public class ClientMain {
                 switch (arguments[0]) {
                     case "SET_PLAYER_ID": {
                         localPlayerId = arguments[1];
+                        System.out.println("You have joined as " + localPlayerId);
                         break;
                     }
                     case "CREATE_BOARD": {
@@ -111,6 +122,10 @@ public class ClientMain {
 
                         break;
                     }
+                    case "GAME_START": {
+                        printBoards();
+                        break;
+                    }
                     case "ADD_HIT": {
                         final String boardId = arguments[1];
                         final int x = Integer.parseInt(arguments[2]);
@@ -121,16 +136,50 @@ public class ClientMain {
                         break;
                     }
                     case "TAKE_TURN": {
+                        final String boardId = arguments[1];
+                        final Player enemyPlayer = players.get(boardId);
+
+                        while (true) {
+                            final int col = indexOfAlphabet(
+                                    console.getString("Column: ", "^[a-zA-Z]$", "Invalid column (A-Z)").charAt(0));
+                            final int row = console.getInt("Row: ", 1, enemyPlayer.getBoardWidth()) - 1;
+                            final Vector2 target = new Vector2(col, row);
+
+                            if (!enemyPlayer.isShot(target)) {
+                                response = col + ":" + row;
+
+                                enemyPlayer.shoot(target);
+
+                                printBoards();
+
+                                if (enemyPlayer.getShipAt(target) != null) {
+                                    System.out.println(console.text("HIT!").green().bold());
+                                } else {
+                                    System.out.println(console.text("MISS!").red().bold());
+                                }
+
+                                break;
+                            }
+                        }
+
                         break;
                     }
-                    case "REPORT_RESULTS": {
-                        break;
+                    case "GAME_END": {
+                        final String winnerId = arguments[1];
+
+                        if (localPlayerId.equals(winnerId)) {
+                            System.out.println(console.text("VICTORY!").green().bold());
+                        } else {
+                            System.out.println(console.text("DEFEAT!").red().bold());
+                        }
+
+                        System.exit(0);
                     }
                 }
             }
 
             // Throwaway message used by server to confirm message received
-            client.write("ACK");
+            client.write(response);
         }
     }
 }
