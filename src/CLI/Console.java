@@ -72,7 +72,7 @@ public class Console {
         return this;
     }
 
-    public Console erase() {
+    public Console screenErase() {
         System.out.print(Constants.ESCAPE + "[2J");
 
         return this;
@@ -196,7 +196,7 @@ public class Console {
 
             final String input = nextLine();
 
-            if (input.length() > 0) {
+            if (input.length() > 0 && input.length() <= 3) {
                 if (input.equalsIgnoreCase("yes".substring(0, input.length()))) {
                     cursorRestore().cursorEraseAfter();
                     return true;

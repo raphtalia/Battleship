@@ -33,8 +33,8 @@ public class ServerMain {
         final int numPatrolBoats;
         final int numSubmarines;
         if (console.getBoolean("Use default game settings?")) {
-            boardWidth = 26;
-            boardHeight = 26;
+            boardWidth = 9;
+            boardHeight = 9;
             numBattleships = 1;
             numCarriers = 1;
             numCruisers = 1;
@@ -56,20 +56,20 @@ public class ServerMain {
 
         // Create boards ahead of time
         final Player player1Game = new Player(boardWidth, boardHeight);
-        // player1Game.placeShipRandom(ShipType.BATTLESHIP);
-        // player1Game.placeShipRandom(ShipType.CARRIER);
-        // player1Game.placeShipRandom(ShipType.CRUISER);
-        // player1Game.placeShipRandom(ShipType.DESTROYER);
+        player1Game.placeShipRandom(ShipType.BATTLESHIP, numBattleships);
+        player1Game.placeShipRandom(ShipType.CARRIER, numCarriers);
+        player1Game.placeShipRandom(ShipType.CRUISER, numCruisers);
+        player1Game.placeShipRandom(ShipType.DESTROYER, numDestroyers);
         player1Game.placeShipRandom(ShipType.PATROL_BOAT, numPatrolBoats);
-        // player1Game.placeShipRandom(ShipType.SUBMARINE);
+        player1Game.placeShipRandom(ShipType.SUBMARINE, numSubmarines);
 
         final Player player2Game = new Player(boardWidth, boardHeight);
-        // player2Game.placeShipRandom(ShipType.BATTLESHIP);
-        // player2Game.placeShipRandom(ShipType.CARRIER);
-        // player2Game.placeShipRandom(ShipType.CRUISER);
-        // player2Game.placeShipRandom(ShipType.DESTROYER);
+        player2Game.placeShipRandom(ShipType.BATTLESHIP, numBattleships);
+        player2Game.placeShipRandom(ShipType.CARRIER, numCarriers);
+        player2Game.placeShipRandom(ShipType.CRUISER, numCruisers);
+        player2Game.placeShipRandom(ShipType.DESTROYER, numDestroyers);
         player2Game.placeShipRandom(ShipType.PATROL_BOAT, numPatrolBoats);
-        // player2Game.placeShipRandom(ShipType.SUBMARINE);
+        player2Game.placeShipRandom(ShipType.SUBMARINE, numSubmarines);
 
         // Setup Player 1
         System.out.println("Waiting for Player 1...");

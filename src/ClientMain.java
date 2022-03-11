@@ -11,6 +11,7 @@ import Game.ShipType;
 import Game.Networking.Client;
 
 public class ClientMain {
+    private static final Console console = new Console();
     private static String localPlayerId = "";
     private static final HashMap<String, Player> players = new HashMap<String, Player>();
 
@@ -25,6 +26,8 @@ public class ClientMain {
     }
 
     private static void printBoards() {
+        console.screenErase().cursorHome();
+
         final Player localPlayer = players.get(localPlayerId);
         localPlayer.printMap(false);
 
@@ -36,28 +39,6 @@ public class ClientMain {
     }
 
     public static void main(String[] args) throws UnknownHostException, IOException {
-        // System.out.println(new Colors("Battleship").bold().red());
-
-        // final Player plyr = new Player(26, 26);
-
-        // plyr.placeShipRandom(ShipType.CARRIER, 2);
-        // plyr.placeShipRandom(ShipType.BATTLESHIP, 2);
-        // plyr.placeShipRandom(ShipType.CRUISER, 2);
-        // plyr.placeShipRandom(ShipType.SUBMARINE, 2);
-        // plyr.placeShipRandom(ShipType.DESTROYER, 2);
-        // plyr.placeShipRandom(ShipType.PATROL_BOAT, 2);
-
-        // for (int i = 0; i < 400; i++) {
-        // plyr.shootRandom();
-        // }
-
-        // plyr.printMap();
-
-        // System.out.printf("%s out of %s ships remain", plyr.getRemainingShips(),
-        // plyr.getTotalShips());
-
-        final Console console = new Console();
-
         final String ip;
         final int port;
 
@@ -68,20 +49,14 @@ public class ClientMain {
             ip = console.getString("IP address: ", "^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$", "Invalid IP address (A.B.C.D)");
             port = console.getInt("Port: ", 0, 65535);
         }
-        final Client client = new Client(ip, port);
-
-        // client.write("hello from client!" + Math.random());
-        // System.out.println(client.read());
-        // System.out.println(client.read());
-
-        // System.out.println(console.getBoolean("Delete all?"));
-
-        // System.out.println(console.getInt("Number please "));
-
-        // System.out.println(console.getInt("Limited number please ", 0, 100));
-
-        // System.out.println(console.getChoice("Choose ", new String[] { "One", "Two",
-        // "Three" }));
+        final Client client;
+        try {
+            client = new Client(ip, port);
+        } catch (IOException e) {
+            System.out.println(console.text("Failed to connect to server").red().bold());
+            System.exit(1);
+            return;
+        }
 
         while (true) {
             final String[] instructions;
@@ -178,7 +153,6 @@ public class ClientMain {
                 }
             }
 
-            // Throwaway message used by server to confirm message received
             client.write(response);
         }
     }
